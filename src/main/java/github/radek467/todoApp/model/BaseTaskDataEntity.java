@@ -12,8 +12,8 @@ abstract class BaseTaskDataEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotBlank(message = "Tasks description mustn't be empty")
-    private String description;
-    private boolean done;
+    protected String description;
+    protected boolean done;
     public int getId() {
         return id;
     }
@@ -26,7 +26,7 @@ abstract class BaseTaskDataEntity {
         return description;
     }
 
-    void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

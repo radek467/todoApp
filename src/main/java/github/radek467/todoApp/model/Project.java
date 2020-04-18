@@ -31,7 +31,7 @@ public class Project {
 
     public void setDescription(String description) { this.description = description; }
 
-    Set<ProjectStep> getSteps() { return steps; }
+    public Set<ProjectStep> getSteps() { return steps; }
 
     void setSteps(Set<ProjectStep> steps) { this.steps = steps; }
 
