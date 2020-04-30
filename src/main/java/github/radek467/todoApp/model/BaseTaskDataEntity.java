@@ -7,7 +7,7 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotBlank;
 
 @MappedSuperclass
-abstract class BaseTaskDataEntity {
+public abstract class BaseTaskDataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

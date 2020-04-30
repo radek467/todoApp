@@ -36,10 +36,12 @@ class TaskGroupService {
     }
 
     public void toggleGroup(Integer id){
-        if(repository.existsByDoneIsFalseAndProject_Id(id) == true){
-            throw new IllegalStateException("All tasks aren't done");
+        if(taskRepository.existsByDoneIsFalseAndGroup_Id(id)){
+            throw new IllegalStateException("Exists undone tasks, can't toggle group");
         }
         TaskGroup taskGroup = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Group with this id isn't exist"));
         taskGroup.setDone(!taskGroup.isDone());
+        repository.save(taskGroup);
+
     }
 }

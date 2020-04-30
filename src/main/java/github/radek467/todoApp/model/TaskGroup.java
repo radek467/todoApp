@@ -21,8 +21,15 @@ import java.util.Set;
     public Set<Task> getTasks() {
         return tasks;
     }
-
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

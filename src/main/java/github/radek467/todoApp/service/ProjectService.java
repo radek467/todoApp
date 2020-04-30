@@ -15,8 +15,10 @@ class ProjectService {
     TaskGroupRepository groupRepository;
     TaskConfigurationProperties configurationProperties;
 
-    ProjectService(ProjectRepository projectRepository){
+    public ProjectService(ProjectRepository projectRepository, TaskGroupRepository groupRepository, TaskConfigurationProperties configurationProperties) {
         this.projectRepository = projectRepository;
+        this.groupRepository = groupRepository;
+        this.configurationProperties = configurationProperties;
     }
 
     public List<Project> readAll(){
@@ -40,7 +42,8 @@ class ProjectService {
                                     projectStep.getDescription(),
                                     deadline.plusDays(projectStep.getDaysToDeadline())))
                             .collect(Collectors.toSet()));
-                    return result;
+                    result.setProject(project);
+                    return groupRepository.save(result);
                 }
         ).orElseThrow(() -> new IllegalArgumentException("Project with this id isn't exist"));
         return new GroupReadModel(resultToReturn);
