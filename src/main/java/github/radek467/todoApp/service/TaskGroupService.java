@@ -1,9 +1,6 @@
 package github.radek467.todoApp.service;
 
-import github.radek467.todoApp.model.Task;
-import github.radek467.todoApp.model.TaskGroup;
-import github.radek467.todoApp.model.TaskGroupRepository;
-import github.radek467.todoApp.model.TaskRepository;
+import github.radek467.todoApp.model.*;
 import github.radek467.todoApp.model.projection.GroupReadModel;
 import github.radek467.todoApp.model.projection.GroupTaskReadModel;
 import github.radek467.todoApp.model.projection.GroupWriteModel;
@@ -14,34 +11,39 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-class TaskGroupService {
-    TaskGroupRepository repository;
-    TaskRepository taskRepository;
+public class TaskGroupService {
+    private TaskGroupRepository repository;
+    private TaskRepository taskRepository;
 
-    TaskGroupService(TaskGroupRepository repository, TaskRepository taskRepository){
-        this.taskRepository = taskRepository;
+    TaskGroupService(final TaskGroupRepository repository, final TaskRepository taskRepository) {
         this.repository = repository;
+        this.taskRepository = taskRepository;
     }
 
-    public List<GroupReadModel> readAll()
-    {
+    public GroupReadModel createGroup(final GroupWriteModel source) {
+//        TaskGroup result = repository.save(source.toGroup());
+//        return new GroupReadModel(result);
+        return createGroup(source,null);
+    }
+
+    public GroupReadModel createGroup(final GroupWriteModel source, final Project project){
+        TaskGroup result = repository.save(source.toGroup(project));
+        return new GroupReadModel(result);
+    }
+
+    public List<GroupReadModel> readAll() {
         return repository.findAll().stream()
                 .map(GroupReadModel::new)
                 .collect(Collectors.toList());
     }
 
-    public GroupReadModel createGroup (GroupWriteModel source)
-    {
-        return new GroupReadModel(repository.save(source.toGroup()));
-    }
-
-    public void toggleGroup(Integer id){
-        if(taskRepository.existsByDoneIsFalseAndGroup_Id(id)){
-            throw new IllegalStateException("Exists undone tasks, can't toggle group");
+    public void toggleGroup(int groupId) {
+        if (taskRepository.existsByDoneIsFalseAndGroup_Id(groupId)) {
+            throw new IllegalStateException("Group has undone tasks. Done all the tasks first");
         }
-        TaskGroup taskGroup = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Group with this id isn't exist"));
-        taskGroup.setDone(!taskGroup.isDone());
-        repository.save(taskGroup);
-
+        TaskGroup result = repository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("TaskGroup with given id not found"));
+        result.setDone(!result.isDone());
+        repository.save(result);
     }
 }

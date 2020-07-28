@@ -1,9 +1,12 @@
 package github.radek467.todoApp.model;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 
 @Entity
 public class Task extends BaseTaskDataEntity{
@@ -21,6 +24,12 @@ public class Task extends BaseTaskDataEntity{
     public Task (String description, LocalDateTime deadline){
         this.description = description;
         this.deadline = deadline;
+    }
+
+    public Task(String description, LocalDateTime deadline, TaskGroup group) {
+        this.description = description;
+        this.deadline = deadline;
+        this.group = group;
     }
 
     public void updateFrom(final Task source)

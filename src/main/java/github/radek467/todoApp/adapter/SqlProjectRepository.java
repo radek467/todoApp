@@ -10,6 +10,6 @@ import java.util.List;
 interface SqlProjectRepository extends ProjectRepository, JpaRepository<Project, Integer> {
 
     @Override
-    @Query("select distinct p from Project p join fetch p.taskGroups")
+    @Query("select distinct p from Project p join fetch p.steps")
     List<Project> findAll();
 }

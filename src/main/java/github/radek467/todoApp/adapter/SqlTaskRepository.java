@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -15,5 +17,5 @@ import java.util.List;
     @Query(nativeQuery = true, value = "select count(*) > 0 from TASK where id =:id")
     boolean existsById(@Param("id") Integer id);
 
-
 }
+

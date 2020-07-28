@@ -36,4 +36,8 @@ public class ProjectStep {
     public void setDaysToDeadline(int daysToDeadline) {
         this.daysToDeadline = daysToDeadline;
     }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 }

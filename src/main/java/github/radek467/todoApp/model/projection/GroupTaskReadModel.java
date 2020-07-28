@@ -7,19 +7,17 @@ import java.time.LocalDateTime;
 public class GroupTaskReadModel {
     private String description;
     private boolean done;
-    private LocalDateTime deadline;
 
-    public GroupTaskReadModel(Task source){
-        this.description = source.getDescription();
-        this.deadline = source.getDeadline();
-        this.done = source.isDone();
+    GroupTaskReadModel(Task source) {
+        description = source.getDescription();
+        done = source.isDone();
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -27,15 +25,7 @@ public class GroupTaskReadModel {
         return done;
     }
 
-    public void setDone(boolean done) {
+    public void setDone(final boolean done) {
         this.done = done;
-    }
-
-    public LocalDateTime getDeadline() {
-        return deadline;
-    }
-
-    public void setDeadline(LocalDateTime deadline) {
-        this.deadline = deadline;
     }
 }

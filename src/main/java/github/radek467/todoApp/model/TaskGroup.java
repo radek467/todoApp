@@ -18,6 +18,7 @@ import java.util.Set;
         @JoinColumn(name = "project_id")
         Project project;
 
+
     public Set<Task> getTasks() {
         return tasks;
     }

@@ -10,9 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+@RequestMapping("/tasks")
 @RestController
 class TaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
@@ -22,19 +26,19 @@ class TaskController {
         this.taskRepository = taskRepository;
     }
 
-    @GetMapping(value = "/tasks", params = {"!size", "!page", "!sort"})
+    @GetMapping(value = "", params = {"!size", "!page", "!sort"})
     ResponseEntity<List<Task>> readAllTasks(){
         logger.info("Exposing all tasks");
         return ResponseEntity.ok(taskRepository.findAll());
     }
 
-    @GetMapping(value = "/tasks")
+    @GetMapping(value = "")
     ResponseEntity <List<Task>> readAllTasks(Pageable page){
         logger.info("Custom pageable");
         return ResponseEntity.ok(taskRepository.findAll(page).getContent());
     }
 
-    @GetMapping(value = "/tasks/{id}")
+    @GetMapping(value = "/{id}")
     ResponseEntity<?> getTaskById(@PathVariable int id)
     {
         Optional task = taskRepository.findById(id);
@@ -44,7 +48,19 @@ class TaskController {
         return ResponseEntity.ok(task);
     }
 
-    @PostMapping(value = "/tasks")
+    @GetMapping(value = "/today")
+    ResponseEntity<List<Task>> getTasksOnToday()
+    {
+        LocalDateTime localDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23,59,59));
+        //List<Task> result = taskRepository.getTasksByDeadlineIsNullOrDeadlineBefore(localDateTime);
+        List<Task> result = taskRepository.getTasksByDoneIsFalseAndDeadlineIsNullOrDeadlineIsBefore(localDateTime);
+        if(result.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping(value = "")
     ResponseEntity<?> createTask(@RequestBody @Valid Task task)
     {
         taskRepository.save(task);
@@ -52,7 +68,7 @@ class TaskController {
     }
 
     @Transactional
-    @PatchMapping(value = "tasks/{id}")
+    @PatchMapping(value = "/{id}")
         public ResponseEntity<?> toggleTask (@PathVariable int id)
     {
         if(!taskRepository.existsById(id)){
@@ -64,7 +80,7 @@ class TaskController {
     }
 
     @Transactional
-    @PutMapping(value = "/tasks/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateTask(@RequestBody @Valid Task task, @PathVariable int id){
         if(!taskRepository.existsById(id)){
             return ResponseEntity.notFound().build();
